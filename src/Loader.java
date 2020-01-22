@@ -27,10 +27,15 @@ public class Loader
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser parser = factory.newSAXParser();
         XMLHandler handler = new XMLHandler();
+
         long usage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+
         parser.parse(new File(fileName), handler);
+
         usage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - usage) / 1024 / 1024;
-        System.out.println(usage);
+
+        System.out.println(usage + " MB занимает парсер SAXParser \n");
+
         handler.DuplicatedVoters();
 
         parseFile(fileName);
@@ -62,7 +67,7 @@ public class Loader
         long usage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
         Document doc = db.parse(new File(fileName));
         usage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - usage) / 1024 / 1024;
-        System.out.println(usage);
+        System.out.println(usage + " MB занимает парсер DOMParser \n");
 
         findEqualVoters(doc);
         fixWorkTimes(doc);

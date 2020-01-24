@@ -70,7 +70,7 @@ public class Loader
         System.out.println(usage + " MB занимает парсер DOMParser \n");
 
         findEqualVoters(doc);
-        fixWorkTimes(doc);
+       // fixWorkTimes(doc);
     }
 
     private static void findEqualVoters(Document doc) throws Exception

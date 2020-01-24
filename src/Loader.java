@@ -27,18 +27,26 @@ public class Loader
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser parser = factory.newSAXParser();
         XMLHandler handler = new XMLHandler();
+        XMLHandlerString handlerString = new XMLHandlerString();
 
-        long usage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
-
-        parser.parse(new File(fileName), handler);
-
-        usage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - usage) / 1024 / 1024;
-
-        System.out.println(usage + " MB занимает парсер SAXParser \n");
-
-        handler.DuplicatedVoters();
-
+        // DOMParser
         parseFile(fileName);
+
+        // Неоптимизированный
+        long usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        parser.parse(new File(fileName), handler);
+        usage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - usage)/1024/1024;
+        System.out.println(usage + " MB занимает парсер SAXParser до оптимизации \n");
+        //handler.DuplicatedVoters();
+
+        // Оптимизтрованный
+        long usageS = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
+        parser.parse(new File(fileName), handlerString);
+        usageS = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - usageS)/1024/1024;
+        System.out.println(usageS + " MB занимает парсер SAXParser после оптимизации \n");
+        //handlerString.DuplicatedVotersString();
+
+
 
         //Printing results
         System.out.println("Voting station work times: ");
@@ -63,13 +71,12 @@ public class Loader
 
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-
-        long usage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024;
+        long usage = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         Document doc = db.parse(new File(fileName));
-        usage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - usage) / 1024 / 1024;
-        System.out.println(usage + " MB занимает парсер DOMParser \n");
+        usage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory() - usage)/1024/1024;
+        System.out.println("\n" + usage + " MB занимает парсер DOMParser \n");
 
-        findEqualVoters(doc);
+        //findEqualVoters(doc);
        // fixWorkTimes(doc);
     }
 
